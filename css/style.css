@@ -5,3 +5,8 @@ body{
     padding: 0;
     font-family: 'Poppins', sans-serif;
 }
+
+.card img{
+    width: 50%;
+    margin: auto;
+}
