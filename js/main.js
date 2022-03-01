@@ -1,53 +1,81 @@
+const toggleSpinner = displayStyle => {
+    document.getElementById('spinner').style.display = displayStyle;
+}
+
+// load all phones
 const loadPhone = () => {
     // clear previous search container
-    document.getElementById('phones-container').textContent = '';
     //clear previous details
+    document.getElementById('phones-container').textContent = '';
     document.getElementById('phone-details').textContent = '';
+
     const searchInput = document.getElementById('search-input');
     const searchText = searchInput.value;
-    const error = document.getElementById('error')
 
-    if (searchText == 'phone' || searchText == 'apple' || searchText == 'iphone' || searchText == 'samsung' || searchText == 'oppo' || searchText == 'huawei') {
-        fetch(`https://openapi.programming-hero.com/api/phones?search=${searchText}`)
-            .then(res => res.json())
-            .then(data => displayPhones(data.data))
+    /*  if (searchText == 'phone' || searchText == 'apple' || searchText == 'iphone' || searchText == 'samsung' || searchText == 'oppo' || searchText == 'huawei') {
+         fetch(`https://openapi.programming-hero.com/api/phones?search=${searchText}`)
+             .then(res => res.json())
+             .then(data => displayPhones(data.data))
+ 
+         // clear input field after search 
+         searchInput.value = '';
+ 
+         // clear error message
+         error.innerText = ''
+ 
+         // load spinner 
+         toggleSpinner('block');
+     } else {
+         error.innerText = 'Phone not found';
+         searchInput.value = '';
+     } */
 
-        // clear input field after search 
-        searchInput.value = '';
+    fetch(`https://openapi.programming-hero.com/api/phones?search=${searchText}`)
+        .then(res => res.json())
+        .then(data => displayPhones(data.data))
 
-        // clear error message
-        error.innerText = ''
-    } else {
-        error.innerText = 'Phone not found';
-        searchInput.value = '';
-    }
+    // clear input field after search 
+    searchInput.value = '';
+
+    // load spinner 
+    toggleSpinner('block');
 }
 
 const displayPhones = phones => {
-    console.log(phones);
+    // console.log(phones);
     const phonesContainer = document.getElementById('phones-container');
     const phonesSlice = phones.slice(0, 20);
-    phonesSlice.forEach(phone => {
-        console.log(phone.length);
-        const div = document.createElement('div');
-        div.classList.add('col');
-        div.innerHTML = `
-        <div class="card h-100 shadow border rounded-3 text-center">
-            <img src="${phone.image}" class="card-img-top p-2" alt="...">
-            <div class="card-body">
-                <h5 class="card-title">${phone.phone_name}</h5>
-                <p class="card-text">Brand: ${phone.brand}</p>
+    if (phonesSlice.length == 0) {
+        document.getElementById('error').innerText = 'Phone not found';
+    }
+    else {
+        phonesSlice?.forEach(phone => {
+            // console.log(phone.length);
+            const div = document.createElement('div');
+            div.classList.add('col');
+            div.innerHTML = `
+            <div class="card h-100 shadow border-0 rounded-3 text-center">
+                <img src="${phone.image}" class="card-img-top p-3" alt="...">
+                <div class="card-body">
+                    <h5 class="card-title">${phone.phone_name}</h5>
+                    <p class="card-text">Brand: ${phone.brand}</p>
+                </div>
+                <div onclick="phoneDetails('${phone.slug}')" class="btn btn-primary">${phone.phone_name} (Details) </div>
             </div>
-            <div onclick="phoneDetails('${phone.slug}')" class="btn btn-primary">${phone.phone_name} (Details) </div>
-        </div>
-        `;
-        phonesContainer.appendChild(div);
-    });
+            `;
+            phonesContainer.appendChild(div);
+        });
+        // hide spinner 
+        toggleSpinner('none');
+
+        // after loading data clear error message
+        document.getElementById('error').innerText = '';
+    }
 }
 
 // phone details 
 const phoneDetails = id => {
-    console.log(id)
+    // console.log(id)
     const url = `https://openapi.programming-hero.com/api/phone/${id}`;
     fetch(url)
         .then(res => res.json())
@@ -55,19 +83,20 @@ const phoneDetails = id => {
 }
 
 const displayPhoneDetails = id => {
-    console.log(id);
+    // console.log(id);
     const phoneDetails = document.getElementById('phone-details');
     phoneDetails.innerHTML = `
-    <div class="card h-100 shadow border rounded-3">
-        <img src="${id.image}" class="card-img-top p-2 img-fluid" alt="...">
+    <div class="card shadow border rounded-3">
+        <img src="${id.image}" class="card-img-top p-4 img-fluid" alt="...">
         <div class="card-body">
             <h5 class="card-title">${id.name}</h5>
             <p class="card-text">${id.releaseDate ? id.releaseDate : 'No release date found'}</p>
+            <span>Stock: ${id.slug.length}</span>
             <h2>Features:</h2>
             <div class="list-group">
                 <li class="card-text list-group-item">Storage: ${id.mainFeatures.storage}</li>
                 <li class="card-text list-group-item">DisplaySize: ${id.mainFeatures.displaySize}</li>
-                <li class="card-text list-group-item">ChipSet: ${id.mainFeatures.chipSet}</li>
+                <li class="card-text list-group-item">ChipSet: ${id.mainFeatures?.chipSet ?? 'Not found'}</li>
                 <li class="card-text list-group-item">Sensors: ${id.mainFeatures.sensors}</li>
                 <li class="card-text list-group-item">WLAN: ${id.others?.WLAN ?? 'Not found'}</li>
                 <li class="card-text list-group-item">Bluetooth: ${id.others?.Bluetooth ?? 'Not found'}</li>
