@@ -1,28 +1,34 @@
 const loadPhone = () => {
+    // clear previous search container
+    document.getElementById('phones-container').textContent = '';
+    //clear previous details
+    document.getElementById('phone-details').textContent = '';
     const searchInput = document.getElementById('search-input');
     const searchText = searchInput.value;
-    document.getElementById('phones-container').textContent = '';
-    document.getElementById('phone-details').textContent = '';
     const error = document.getElementById('error')
-    if (searchText != 'phone_name') {
-        error.innerText = `Don't have in our store `;
+
+    if (searchText == 'phone' || searchText == 'apple' || searchText == 'iphone' || searchText == 'samsung' || searchText == 'oppo' || searchText == 'huawei') {
+        fetch(`https://openapi.programming-hero.com/api/phones?search=${searchText}`)
+            .then(res => res.json())
+            .then(data => displayPhones(data.data))
+
+        // clear input field after search 
+        searchInput.value = '';
+
+        // clear error message
+        error.innerText = ''
+    } else {
+        error.innerText = 'Phone not found';
         searchInput.value = '';
     }
-    fetch(`https://openapi.programming-hero.com/api/phones?search=${searchText}`)
-        .then(res => res.json())
-        .then(data => displayPhones(data.data))
-    searchInput.value = '';
-
-
-
 }
 
 const displayPhones = phones => {
-    // console.log(phones);
+    console.log(phones);
     const phonesContainer = document.getElementById('phones-container');
     const phonesSlice = phones.slice(0, 20);
     phonesSlice.forEach(phone => {
-        console.log(phone);
+        console.log(phone.length);
         const div = document.createElement('div');
         div.classList.add('col');
         div.innerHTML = `
@@ -63,12 +69,12 @@ const displayPhoneDetails = id => {
                 <li class="card-text list-group-item">DisplaySize: ${id.mainFeatures.displaySize}</li>
                 <li class="card-text list-group-item">ChipSet: ${id.mainFeatures.chipSet}</li>
                 <li class="card-text list-group-item">Sensors: ${id.mainFeatures.sensors}</li>
-                <li class="card-text list-group-item">WLAN: ${id.others.WLAN}</li>
-                <li class="card-text list-group-item">Bluetooth: ${id.others.Bluetooth}</li>
-                <li class="card-text list-group-item">GPS: ${id.others.GPS}</li>
-                <li class="card-text list-group-item">NFC: ${id.others.NFC}</li>
-                <li class="card-text list-group-item">USB: ${id.others.USB}</li>
-                <li class="card-text list-group-item">Radio: ${id.others.Radio}</li>
+                <li class="card-text list-group-item">WLAN: ${id.others?.WLAN ?? 'Not found'}</li>
+                <li class="card-text list-group-item">Bluetooth: ${id.others?.Bluetooth ?? 'Not found'}</li>
+                <li class="card-text list-group-item">GPS: ${id.others?.GPS ?? 'Not found'}</li>
+                <li class="card-text list-group-item">NFC: ${id.others?.NFC ?? 'Not found'}</li>
+                <li class="card-text list-group-item">USB: ${id.others?.USB ?? 'Not found'}</li>
+                <li class="card-text list-group-item">Radio: ${id.others?.Radio ?? 'Not found'}</li>
             </div>
         </div>
     </div>
