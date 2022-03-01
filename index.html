@@ -16,20 +16,35 @@
 <body>
     <div class="container">
         <h1 class="text-center my-4">Find Your Favorite Phone</h1>
-        <div class="d-flex mb-4  w-75 mx-auto bg-body shadow p-4 border-0 rounded">
-            <input id="search-input" type="text" class="form-control" placeholder="Enter your favorite phone name">
-            <button onclick="loadPhone()" class="btn btn-outline-success ms-2" type="button"
-                id="button-search">Search</button>
+        <div class="row justify-content-center align-items-center mx-auto">
+            <div class="col-md-6 col">
+                <div class="d-flex mb-4 bg-body shadow p-4 border-0 rounded">
+                    <input id="search-input" type="text" class="form-control"
+                        placeholder="Enter your favorite phone name">
+                    <button onclick="loadPhone()" class="btn btn-outline-success ms-2" type="button"
+                        id="button-search">Search</button>
+                </div>
+            </div>
         </div>
+        <!-- error message section  -->
         <p id="error" class="text-center text-danger"></p>
+
+        <!-- spinner section  -->
         <div id="spinner" class="spinner-grow mx-auto" role="status">
             <span class="visually-hidden">Loading...</span>
         </div>
 
         <!-- phone details  -->
-        <div id="phone-details" class="w-50 mx-auto my-4 mt-4 text-center"></div>
+        <!-- <div id="phone-details" class="w-50  mx-auto my-4 mt-4 text-center"></div> -->
+        <div class="text-center">
+            <div class="row gy-4">
+                <div id="phone-details" class="col-md-6 col justify-content-center align-items-center mx-auto">
+
+                </div>
+            </div>
+        </div>
         <!-- display all phones  -->
-        <div id="phones-container" class="row row-cols-1 row-cols-md-3 gy-4 my-4">
+        <div id="phones-container" class="row row-cols-1 row-cols-md-3 g-4 my-2">
 
         </div>
     </div>

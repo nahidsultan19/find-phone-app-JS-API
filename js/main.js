@@ -12,24 +12,6 @@ const loadPhone = () => {
     const searchInput = document.getElementById('search-input');
     const searchText = searchInput.value;
 
-    /*  if (searchText == 'phone' || searchText == 'apple' || searchText == 'iphone' || searchText == 'samsung' || searchText == 'oppo' || searchText == 'huawei') {
-         fetch(`https://openapi.programming-hero.com/api/phones?search=${searchText}`)
-             .then(res => res.json())
-             .then(data => displayPhones(data.data))
- 
-         // clear input field after search 
-         searchInput.value = '';
- 
-         // clear error message
-         error.innerText = ''
- 
-         // load spinner 
-         toggleSpinner('block');
-     } else {
-         error.innerText = 'Phone not found';
-         searchInput.value = '';
-     } */
-
     fetch(`https://openapi.programming-hero.com/api/phones?search=${searchText}`)
         .then(res => res.json())
         .then(data => displayPhones(data.data))
@@ -42,7 +24,6 @@ const loadPhone = () => {
 }
 
 const displayPhones = phones => {
-    // console.log(phones);
     const phonesContainer = document.getElementById('phones-container');
     const phonesSlice = phones.slice(0, 20);
     if (phonesSlice.length == 0) {
@@ -50,7 +31,6 @@ const displayPhones = phones => {
     }
     else {
         phonesSlice?.forEach(phone => {
-            // console.log(phone.length);
             const div = document.createElement('div');
             div.classList.add('col');
             div.innerHTML = `
@@ -65,6 +45,7 @@ const displayPhones = phones => {
             `;
             phonesContainer.appendChild(div);
         });
+
         // hide spinner 
         toggleSpinner('none');
 
@@ -75,7 +56,6 @@ const displayPhones = phones => {
 
 // phone details 
 const phoneDetails = id => {
-    // console.log(id)
     const url = `https://openapi.programming-hero.com/api/phone/${id}`;
     fetch(url)
         .then(res => res.json())
@@ -83,7 +63,6 @@ const phoneDetails = id => {
 }
 
 const displayPhoneDetails = id => {
-    // console.log(id);
     const phoneDetails = document.getElementById('phone-details');
     phoneDetails.innerHTML = `
     <div class="card shadow border rounded-3">
